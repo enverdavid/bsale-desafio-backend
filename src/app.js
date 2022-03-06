@@ -1,8 +1,11 @@
 const express = require('express');
 const { productsRouter } = require('./routers/products.router');
 const { dataBase } = require('./database/connection');
+const cors = require('cors');
 
 const app = express();
+
+app.use(cors());
 
 const conectarDB = async () => {
   try {

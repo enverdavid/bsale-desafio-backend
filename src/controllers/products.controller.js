@@ -1,15 +1,31 @@
 const { dataBase } = require('../database/connection');
 const { Product } = require('../models/product');
+const { Op } = require('sequelize');
 
 const getAllProducts = async (req, res) => {
-  // const allProducts = await dataBase.query('SELECT * FROM product');s
-  const allProducts = await Product.findAll();
-  res.json({ data: allProducts });
+  
+  const whereOptions = {};
+
+  if (req.query.search) {
+    whereOptions.name = {
+      [Op.like]: `%${req.query.search}%`
+    }
+  }
+
+  if (req.query.category) {
+    whereOptions.category = req.query.category
+  }
+
+  const allProducts = await Product.findAndCountAll({
+    where: whereOptions
+  });
+  res.json(allProducts);
 };
 
-const getOneProduct = (req, res) => {
+const getOneProduct = async (req, res) => {
   const { id } = req.params;
-  res.json({ msg: `retorno producto con el id ${id}` });
+  const producto = await Product.findByPk(id);
+  res.json({ data: producto });
 };
 
 module.exports = {
