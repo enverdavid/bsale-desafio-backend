@@ -1,6 +1,7 @@
 const express = require('express');
 const { productsRouter } = require('./routers/products.router');
 const { dataBase } = require('./database/connection');
+const { categoriesRouter } = require('./routers/categories.router ');
 const cors = require('cors');
 
 const app = express();
@@ -23,5 +24,6 @@ app.get('/api/v1', (req, res) => {
 });
 
 app.use('/api/v1/products', productsRouter);
+app.use('/api/v1/categories', categoriesRouter);
 
 module.exports = { app };
